@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title></title>
+  <!-- the star of the show - the Vue library! -->
+  <script src="https://unpkg.com/vue/dist/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.2/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script>
+    // when life is settled, load up the fun stuff
+    document.addEventListener('DOMContentLoaded', function () {
+      new Vue({
+        el: '#app',
+        // define data - initial display text
+        methods: {
+            async downloadExcelFile() {
+                axios.request({method:'post',url:'http://localhost:4001/transaction/Data',data:{
+                    
+	from:"2021-03-24T07:13:47.150Z",
+	to:"2021-05-09T05:30:59.151Z",
+	memberId:"5f5fa4ebaba83d001af720e0"
+
+    }, ResponseType:"blob"})
+    
+  .then(function (res) {
+    console.log(res);
+    var file = new Blob([res.data], {type: 'data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      var fileURL = URL.createObjectURL(file);
+      window.open(fileURL);
+      //window.navigator.msSaveOrOpenBlob(fileURL,"data.xlsx");
+  })
+  .catch(function (error) {
+    console.log(error);
+  });
+        }
+    }
+      })
+    })
+    
+  </script>
+</head>
+<body>
+  <div id="app">
+    <button v-on:click="downloadExcelFile">Download Excel File</button>
+  </div>
+</body>
+</html>
